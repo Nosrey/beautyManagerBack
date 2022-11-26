@@ -16,6 +16,10 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: true
     },
+    imagen: {
+      type: DataTypes.TEXT,
+      defaultValue: "https://media.istockphoto.com/id/1320642367/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=f3NHgpLXNEkXvbdF1CDiK4aChLtcfTrU3lnicaKsUbk="
+    },
     stock: {
       type: DataTypes.INTEGER,
       defaultValue: 0,

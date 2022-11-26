@@ -29,10 +29,11 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        let { name, stock, price, avaible } = req.body
-        if (name && stock && price && (avaible !== null)) {
+        let { name, imagen, stock, price, avaible } = req.body
+        if (name && imagen && stock && price && (avaible !== null)) {
             let objeto = {
                 name,
+                imagen,
                 stock,
                 price,
                 avaible
