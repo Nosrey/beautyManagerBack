@@ -27,10 +27,11 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+// rutas post
 router.post('/', async (req, res) => {
     try {
         let { name, imagen, stock, price, avaible } = req.body
-        if (name && imagen && stock && price && (avaible !== null)) {
+        if (name && stock && price && (avaible !== null)) {
             let objeto = {
                 name,
                 imagen,
@@ -38,6 +39,8 @@ router.post('/', async (req, res) => {
                 price,
                 avaible
             }
+            if (!objeto.imagen.length) objeto.imagen = "https://media.istockphoto.com/id/1320642367/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=f3NHgpLXNEkXvbdF1CDiK4aChLtcfTrU3lnicaKsUbk="
+
             let existencia = await Product.findAll({ where: objeto })
             if (!existencia.length) {
                 let respuesta = await Product.create(objeto)
@@ -48,6 +51,27 @@ router.post('/', async (req, res) => {
         } else {
             throw new Error('The info provided is not enough');
         }
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
+// rutas put
+
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        let { name, imagen, stock, price, avaible } = req.body
+        const producto = await Product.findByPk(id)
+        if (name) producto.name = name
+        if (imagen) producto.imagen = imagen
+        if (stock) producto.stock = stock
+        if (price) producto.price = price
+        if (avaible) producto.avaible = avaible
+
+        await producto.save();
+        res.json(producto);
     }
     catch (error) {
         return res.status(500).json({ message: error.message })
