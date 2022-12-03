@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { Product } = require('../db')
+const { Category } = require('../db')
 require('dotenv').config();
 
 
@@ -8,42 +8,28 @@ require('dotenv').config();
 // rutas get
 router.get('/', async (req, res) => {
     try {
-        let productos = await Product.findAll();
-        return res.json(productos)
+        let categorias = await Category.findAll();
+        return res.json(categorias)
     }
     catch (error) {
         return res.status(500).json({ message: error.message })
     }
 })
 
-router.get('/:id', async (req, res) => {
-    try {
-        let { id } = req.params
-        let productos = await Product.findAll({ where: { id: id } });
-        return res.json(productos)
-    }
-    catch (error) {
-        return res.status(500).json({ message: error.message })
-    }
-})
+
 
 // rutas post
 router.post('/', async (req, res) => {
     try {
-        let { name, imagen, stock, price, avaible } = req.body
-        if (name && stock && price && (avaible !== null)) {
+        let { name } = req.body
+        if (name) {
             let objeto = {
-                name,
-                imagen,
-                stock,
-                price,
-                avaible
+                name
             }
-            if (!objeto.imagen.length) objeto.imagen = "https://media.istockphoto.com/id/1320642367/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=f3NHgpLXNEkXvbdF1CDiK4aChLtcfTrU3lnicaKsUbk="
 
-            let existencia = await Product.findAll({ where: objeto })
+            let existencia = await Category.findAll({ where: objeto })
             if (!existencia.length) {
-                let respuesta = await Product.create(objeto)
+                let respuesta = await Category.create(objeto)
                 return res.json(respuesta)
             } else {
                 throw new Error('That product already exist')
@@ -57,25 +43,5 @@ router.post('/', async (req, res) => {
     }
 })
 
-// rutas put
-
-router.put('/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        let { name, imagen, stock, price, avaible } = req.body
-        const producto = await Product.findByPk(id)
-        if (name) producto.name = name
-        if (imagen) producto.imagen = imagen
-        if (stock) producto.stock = stock
-        if (price) producto.price = price
-        if (avaible) producto.avaible = avaible
-
-        await producto.save();
-        res.json(producto);
-    }
-    catch (error) {
-        return res.status(500).json({ message: error.message })
-    }
-})
 
 module.exports = router;
