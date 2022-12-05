@@ -21,27 +21,35 @@ router.get('/', async (req, res) => {
 // rutas post
 router.post('/', async (req, res) => {
     try {
-        let { name } = req.body
-        if (name) {
-            let objeto = {
-                name
-            }
+        let { arr } = req.body
+        let = mensaje = 'hola'
+        if (arr) {
+            arr.map(async (el) => {
+                el = el.toUpperCase(); // para ponerlo en Mayuscula
+                let objeto = {
+                    name: el
+                }
 
-            let existencia = await Category.findAll({ where: objeto })
-            if (!existencia.length) {
-                let respuesta = await Category.create(objeto)
-                return res.json(respuesta)
-            } else {
-                throw new Error('That product already exist')
-            }
-        } else {
+                let existencia = await Category.findAll({ where: objeto })
+                if (!existencia.length) {
+                    await Category.create(objeto)
+                } else {
+                    console.log('entre')
+                    mensaje = 'adios'
+                }
+            })
+
+            return res.json(mensaje)
+        }
+        else {
             throw new Error('The info provided is not enough');
         }
     }
     catch (error) {
         return res.status(500).json({ message: error.message })
     }
-})
+}
+)
 
 
 module.exports = router;

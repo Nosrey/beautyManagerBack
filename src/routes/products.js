@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { Product } = require('../db')
+const { Product, Category } = require('../db')
 require('dotenv').config();
 
 
@@ -30,8 +30,8 @@ router.get('/:id', async (req, res) => {
 // rutas post
 router.post('/', async (req, res) => {
     try {
-        let { name, imagen, stock, price, avaible } = req.body
-        if (name && stock && price && (avaible !== null)) {
+        let { name, imagen, stock, price, avaible, categoryNums } = req.body
+        if (name && stock && price && categoryArr.length && (avaible !== null) && categoryNums) {
             let objeto = {
                 name,
                 imagen,
