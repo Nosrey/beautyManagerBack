@@ -8,7 +8,7 @@ require('dotenv').config();
 // rutas get
 router.get('/', async (req, res) => {
     try {
-        let productos = await Product.findAll();
+        let productos = await Product.findAll({ include: Category });
         return res.json(productos)
     }
     catch (error) {
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         let { id } = req.params
-        let productos = await Product.findAll({ where: { id: id } });
+        let productos = await Product.findAll({ where: { id: id }, include: Category });
         return res.json(productos)
     }
     catch (error) {
@@ -30,8 +30,8 @@ router.get('/:id', async (req, res) => {
 // rutas post
 router.post('/', async (req, res) => {
     try {
-        let { name, imagen, stock, price, avaible, categoryNums } = req.body
-        if (name && stock && price && categoryArr.length && (avaible !== null) && categoryNums) {
+        let { name, imagen, stock, price, avaible, categoryNames } = req.body  // obtenemos los valores
+        if (name && stock && price && (avaible !== null) && categoryNames) { // verificamos
             let objeto = {
                 name,
                 imagen,
@@ -39,11 +39,21 @@ router.post('/', async (req, res) => {
                 price,
                 avaible
             }
+            // establecemos la imagen
             if (!objeto.imagen.length) objeto.imagen = "https://media.istockphoto.com/id/1320642367/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=f3NHgpLXNEkXvbdF1CDiK4aChLtcfTrU3lnicaKsUbk="
-
-            let existencia = await Product.findAll({ where: objeto })
+            // revisamos si existe
+            let existencia = await Product.findAll({ where: {name: objeto.name.toLowerCase()} })
             if (!existencia.length) {
                 let respuesta = await Product.create(objeto)
+                // para crear las categorias del producto
+                if (categoryNames.length) {
+                    categoryNames.map(async category => {
+                        category = category.toUpperCase()
+                        let categoryEl = await Category.findOne({ where: { name: category } })
+                        respuesta.addCategory(categoryEl, { through: 'Product_Category' })
+                    })
+                }
+                // enviamos la respuesta
                 return res.json(respuesta)
             } else {
                 throw new Error('That product already exist')

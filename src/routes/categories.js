@@ -22,24 +22,20 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         let { arr } = req.body
-        let = mensaje = 'hola'
         if (arr) {
             arr.map(async (el) => {
-                el = el.toUpperCase(); // para ponerlo en Mayuscula
-                let objeto = {
-                    name: el
-                }
-
-                let existencia = await Category.findAll({ where: objeto })
-                if (!existencia.length) {
-                    await Category.create(objeto)
-                } else {
-                    console.log('entre')
-                    mensaje = 'adios'
-                }
+                    el = el.toUpperCase(); // para ponerlo en Mayuscula
+                    let objeto = {
+                        name: el
+                    }
+                    let existencia = await Category.findAll({ where: objeto })
+                    if (!existencia.length) {
+                        await Category.create(objeto)
+                    } else {
+                        console.log('at least one product is already in the Database')
+                    }
             })
-
-            return res.json(mensaje)
+            return res.json('Categories recieved')
         }
         else {
             throw new Error('The info provided is not enough');
