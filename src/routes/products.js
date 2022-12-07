@@ -72,13 +72,25 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        let { name, imagen, stock, price, avaible } = req.body
-        const producto = await Product.findByPk(id)
+        let { name, imagen, stock, price, avaible, categoryNames } = req.body
+        const producto = await Product.findByPk(id, {include: Category})
         if (name) producto.name = name
         if (imagen) producto.imagen = imagen
         if (stock) producto.stock = stock
         if (price) producto.price = price
         if (avaible) producto.avaible = avaible
+
+        producto.Categories.map(async p => {
+              await producto.removeCategories(p);
+        })
+
+        if (categoryNames.length) {
+            categoryNames.map(async category => {
+                category = category.toUpperCase()
+                let categoryEl = await Category.findOne({ where: { name: category } })
+                producto.addCategory(categoryEl, { through: 'Product_Category' })
+            })
+        }
 
         await producto.save();
         res.json(producto);
