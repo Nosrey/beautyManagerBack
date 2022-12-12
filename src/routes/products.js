@@ -80,11 +80,10 @@ router.put('/:id', async (req, res) => {
         if (price) producto.price = price
         if (avaible) producto.avaible = avaible
 
-        producto.Categories.map(async p => {
-              await producto.removeCategories(p);
-        })
-
         if (categoryNames.length) {
+            producto.Categories.map(async p => {
+                  await producto.removeCategories(p);
+            })
             categoryNames.map(async category => {
                 category = category.toUpperCase()
                 let categoryEl = await Category.findOne({ where: { name: category } })
