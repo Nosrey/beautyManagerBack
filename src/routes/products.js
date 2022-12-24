@@ -30,14 +30,15 @@ router.get('/:id', async (req, res) => {
 // rutas post
 router.post('/', async (req, res) => {
     try {
-        let { name, imagen, stock, price, avaible, categoryNames } = req.body  // obtenemos los valores
-        if (name && stock && price && (avaible !== null) && categoryNames) { // verificamos
+        let { name, imagen, stock, price, priceBuy, avaible, categoryNames } = req.body  // obtenemos los valores
+        if (name && stock && price && priceBuy && (avaible !== null) && categoryNames) { // verificamos
             let objeto = {
                 name,
                 imagen,
                 stock,
                 price,
-                avaible
+                avaible,
+                priceBuy
             }
             // establecemos la imagen
             if (!objeto.imagen.length) objeto.imagen = "https://media.istockphoto.com/id/1320642367/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=f3NHgpLXNEkXvbdF1CDiK4aChLtcfTrU3lnicaKsUbk="
@@ -72,12 +73,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        let { name, imagen, stock, price, avaible, categoryNames } = req.body
+        let { name, imagen, stock, price, priceBuy, avaible, categoryNames } = req.body
         const producto = await Product.findByPk(id, {include: Category})
         if (name) producto.name = name
         if (imagen) producto.imagen = imagen
         if (stock) producto.stock = stock
         if (price) producto.price = price
+        if (priceBuy) producto.priceBuy = priceBuy
         if (avaible) producto.avaible = avaible
 
         if (categoryNames.length) {
