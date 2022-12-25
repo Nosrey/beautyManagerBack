@@ -30,12 +30,13 @@ router.get('/:id', async (req, res) => {
 // rutas post
 router.post('/', async (req, res) => {
     try {
-        let { name, imagen, stock, price, priceBuy, avaible, categoryNames } = req.body  // obtenemos los valores
+        let { name, imagen, stock, stockDeposito, price, priceBuy, avaible, categoryNames } = req.body  // obtenemos los valores
         if (name && stock && price && priceBuy && (avaible !== null) && categoryNames) { // verificamos
             let objeto = {
                 name,
                 imagen,
                 stock,
+                stockDeposito,
                 price,
                 avaible,
                 priceBuy
@@ -73,11 +74,12 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        let { name, imagen, stock, price, priceBuy, avaible, categoryNames } = req.body
+        let { name, imagen, stock, stockDeposito, price, priceBuy, avaible, categoryNames } = req.body
         const producto = await Product.findByPk(id, {include: Category})
         if (name) producto.name = name
         if (imagen) producto.imagen = imagen
         if (stock) producto.stock = stock
+        if (stockDeposito) producto.stockDeposito = stockDeposito
         if (price) producto.price = price
         if (priceBuy) producto.priceBuy = priceBuy
         if (avaible) producto.avaible = avaible
