@@ -16,6 +16,25 @@ router.get('/', async (req, res) => {
     }
 })
 
+// express route type get
+// return one element with specific id
+router.get('/:id', async (req, res) => {
+    try {
+        let { id } = req.params
+        let categoria = await Category.findByPk(id)
+        if (categoria) {
+            return res.json(categoria)
+        }
+        else {
+            throw new Error('The category does not exist');
+        }
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
+
 
 
 // rutas post
