@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         let { name, imagen, stock, stockDeposito, price, priceBuy, avaible, categoryNames } = req.body  // obtenemos los valores
-        if (name && stock && price && priceBuy && (avaible !== null) && categoryNames) { // verificamos
+        if (name && (stock !== null) && (stockDeposito !== null) && price && priceBuy && (avaible !== null) && categoryNames) { // verificamos
             let objeto = {
                 name,
                 imagen,
@@ -78,8 +78,8 @@ router.put('/:id', async (req, res) => {
         const producto = await Product.findByPk(id, {include: Category})
         if (name) producto.name = name
         if (imagen) producto.imagen = imagen
-        if (stock) producto.stock = stock
-        if (stockDeposito) producto.stockDeposito = stockDeposito
+        if (stock !== null) producto.stock = stock
+        if (stockDeposito !== null) producto.stockDeposito = stockDeposito
         if (price) producto.price = price
         if (priceBuy) producto.priceBuy = priceBuy
         if (avaible) producto.avaible = avaible
@@ -97,6 +97,19 @@ router.put('/:id', async (req, res) => {
 
         await producto.save();
         res.json(producto);
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
+// ruta delete para eliminar un producto por id
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const producto = await Product.findByPk(id);
+        await producto.destroy();
+        res.json({ message: 'Product deleted' });
     }
     catch (error) {
         return res.status(500).json({ message: error.message })
