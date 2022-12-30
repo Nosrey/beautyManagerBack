@@ -17,8 +17,8 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const server = require('./src/app.js').default;
-const { conn } = require('./src/db.js');
+const server = require('./api/app.js');
+const { conn } = require('./api/db.js');
 const port = 3001
 
 // Syncing all the models at once.
