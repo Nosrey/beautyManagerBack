@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const products = require('./routes/products.js');
 const categories = require('./routes/categories.js')
+// ok
 
 require('./db.js');
 
