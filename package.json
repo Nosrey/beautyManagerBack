@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "16.x"
-  },
   "scripts": {
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,5 +23,8 @@
     "pg": "^8.8.0",
     "request": "^2.88.2",
     "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "@vercel/node": "^2.8.2"
   }
 }
